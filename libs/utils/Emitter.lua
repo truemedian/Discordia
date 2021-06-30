@@ -1,3 +1,9 @@
+--[=[
+@class Emitter
+@tag utility
+@description TODO
+]=]
+
 local Listener = require('./Listener')
 local Iterable = require('./Iterable')
 
@@ -37,16 +43,36 @@ end
 
 local once = {}
 
+--[=[
+@constructor __init
+@description TODO
+]=]
 function Emitter:__init()
 	self._listeners = setmetatable({}, meta)
 end
 
+--[=[
+@method on
+@param eventName string
+@param callback function
+@param? errorHandler function
+@returns Listener
+@description TODO
+]=]
 function Emitter:on(eventName, callback, errorHandler)
 	local listener = Listener(self, eventName, callback, errorHandler)
 	insert(self._listeners[listener.eventName], listener)
 	return listener
 end
 
+--[=[
+@method once
+@param eventName string
+@param callback function
+@param? errorHandler function
+@returns Listener
+@description TODO
+]=]
 function Emitter:once(eventName, callback, errorHandler)
 	local listener = Listener(self, eventName, callback, errorHandler)
 	insert(self._listeners[listener.eventName], listener)
@@ -54,6 +80,14 @@ function Emitter:once(eventName, callback, errorHandler)
 	return listener
 end
 
+
+--[=[
+@method emit
+@param eventName string
+@param ... any
+@returns nil
+@description TODO
+]=]
 function Emitter:emit(eventName, ...)
 	local listeners = self._listeners[checkType('string', eventName)]
 	for i = 1, #listeners do
@@ -70,6 +104,12 @@ function Emitter:emit(eventName, ...)
 	end
 end
 
+--[=[
+@method getListeners
+@param eventName string
+@returns Iterable[Listener]
+@description TODO
+]=]
 function Emitter:getListeners(eventName)
 	local listeners = self._listeners[checkType('string', eventName)]
 	local new = {}
@@ -81,6 +121,13 @@ function Emitter:getListeners(eventName)
 	return Iterable(new)
 end
 
+--[=[
+@method removeListener
+@param eventName string
+@param listener Listener
+@returns nil
+@description TODO
+]=]
 function Emitter:removeListener(eventName, listener)
 	local listeners = self._listeners[checkType('string', eventName)]
 	for i, v in ipairs(listeners) do
@@ -92,6 +139,12 @@ function Emitter:removeListener(eventName, listener)
 	return false
 end
 
+--[=[
+@method removeAllListeners
+@param eventName string
+@returns nil
+@description TODO
+]=]
 function Emitter:removeAllListeners(eventName)
 	if eventName then
 		self._listeners[checkType('string', eventName)] = nil
@@ -102,6 +155,15 @@ function Emitter:removeAllListeners(eventName)
 	end
 end
 
+--[=[
+@method eventName
+@tag yields
+@param eventName string
+@param? timeout number
+@param? predicate function
+@returns any
+@description TODO
+]=]
 function Emitter:waitFor(eventName, timeout, predicate)
 
 	eventName = checkType('string', eventName)

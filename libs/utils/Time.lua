@@ -1,3 +1,9 @@
+--[=[
+@class Time
+@tag utility
+@description TODO
+]=]
+
 local class = require('../class')
 local typing = require('../typing')
 local constants = require('../constants')
@@ -37,6 +43,11 @@ local function checkTime(obj)
 	return error('cannot perform operation', 2)
 end
 
+--[=[
+@constructor __init
+@param? value number 0
+@description TODO
+]=]
 function Time:__init(value)
 	self._value = value and checkNumber(value) or 0
 end
@@ -85,6 +96,11 @@ function Time:__div(other)
 	end
 end
 
+--[=[
+@method toString
+@returns string
+@description TODO
+]=]
 function Time:toString()
 	local ret = {}
 	local v = self._value
@@ -100,33 +116,82 @@ function Time:toString()
 	return #ret > 0 and concat(ret, ', ') or '0 ' .. units[#units][1]
 end
 
+--[=[
+@static fromWeeks
+@param time number
+@returns Time
+@description TODO
+]=]
 function Time.fromWeeks(t)
 	return Time(checkNumber(t) * US_PER_WEEK)
 end
 
+--[=[
+@static fromDays
+@param time number
+@returns Time
+@description TODO
+]=]
 function Time.fromDays(t)
 	return Time(checkNumber(t) * US_PER_DAY)
 end
 
+--[=[
+@static fromHours
+@param time number
+@returns Time
+@description TODO
+]=]
 function Time.fromHours(t)
 	return Time(checkNumber(t) * US_PER_HOUR)
 end
 
+--[=[
+@static fromMinutes
+@param time number
+@returns Time
+@description TODO
+]=]
 function Time.fromMinutes(t)
 	return Time(checkNumber(t) * US_PER_MIN)
 end
+
+--[=[
+@static fromSeconds
+@param time number
+@returns Time
+@description TODO
+]=]
 function Time.fromSeconds(t)
 	return Time(checkNumber(t) * US_PER_S)
 end
 
+--[=[
+@static fromMilliseconds
+@param time number
+@returns Time
+@description TODO
+]=]
 function Time.fromMilliseconds(t)
 	return Time(checkNumber(t) * US_PER_MS)
 end
 
+--[=[
+@static fromMicroseconds
+@param time number
+@returns Time
+@description TODO
+]=]
 function Time.fromMicroseconds(t)
 	return Time(checkNumber(t))
 end
 
+--[=[
+@static fromTable
+@param tbl table
+@returns Time
+@description TODO
+]=]
 function Time.fromTable(t)
 	local n = 0
 	for _, v in ipairs(units) do
@@ -138,34 +203,74 @@ function Time.fromTable(t)
 	return Time(n)
 end
 
+--[=[
+@method toWeeks
+@returns number
+@description TODO
+]=]
 function Time:toWeeks()
 	return self._value / US_PER_WEEK
 end
 
+--[=[
+@method toDays
+@returns number
+@description TODO
+]=]
 function Time:toDays()
 	return self._value / US_PER_DAY
 end
 
+--[=[
+@method toHours
+@returns number
+@description TODO
+]=]
 function Time:toHours()
 	return self._value / US_PER_HOUR
 end
 
+--[=[
+@method toMinutes
+@returns number
+@description TODO
+]=]
 function Time:toMinutes()
 	return self._value / US_PER_MIN
 end
 
+--[=[
+@method toSeconds
+@returns number
+@description TODO
+]=]
 function Time:toSeconds()
 	return self._value / US_PER_S
 end
 
+--[=[
+@method toMilliseconds
+@returns number
+@description TODO
+]=]
 function Time:toMilliseconds()
 	return self._value / US_PER_MS
 end
 
+--[=[
+@method toMicroseconds
+@returns number
+@description TODO
+]=]
 function Time:toMicroseconds()
 	return self._value
 end
 
+--[=[
+@method toTable
+@returns table[string,number]
+@description TODO
+]=]
 function Time:toTable()
 	local ret = {}
 	local v = self._value
@@ -177,6 +282,11 @@ end
 
 ----
 
+--[=[
+@property value
+@type number
+@description TODO
+]=]
 function get:value()
 	return self._value
 end

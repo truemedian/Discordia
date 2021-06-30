@@ -1,3 +1,9 @@
+--[=[
+@class Bitfield
+@tag utility
+@description TODO
+]=]
+
 local class = require('../class')
 local typing = require('../typing')
 local helpers = require('../helpers')
@@ -71,6 +77,12 @@ local function checkBitfield(obj)
 	return error('cannot perform operation', 2)
 end
 
+--[=[
+@constructor __init
+@param? value string,number,uint64 0
+@param? base number[2,36] 10
+@description TODO
+]=]
 function Bitfield:__init(v, base)
 	self._value = v and checkValue(v, base) or 0ULL
 end
@@ -119,6 +131,12 @@ function Bitfield:__div(other)
 	end
 end
 
+--[=[
+@method toArray
+@param filter table[string,number]
+@returns table[string]
+@description TODO
+]=]
 function Bitfield:toArray(filter)
 	local arr = {}
 	for k, v in pairs(checkType('table', filter)) do
@@ -129,6 +147,12 @@ function Bitfield:toArray(filter)
 	return arr
 end
 
+--[=[
+@method toTable
+@param filter table[string,number]
+@returns table[string,boolean]
+@description TODO
+]=]
 function Bitfield:toTable(filter)
 	local tbl = {}
 	for k, v in pairs(checkType('table', filter)) do
@@ -137,6 +161,13 @@ function Bitfield:toTable(filter)
 	return tbl
 end
 
+--[=[
+@method toString
+@param? base number[2,36] 2
+@param? length number 1
+@returns string
+@description TODO
+]=]
 function Bitfield:toString(base, len)
 	local n = self._value
 	local ret = {}
@@ -153,80 +184,185 @@ function Bitfield:toString(base, len)
 	return reverse(concat(ret))
 end
 
+--[=[
+@method toBin
+@param? length number
+@returns string
+@description TODO
+]=]
 function Bitfield:toBin(len)
 	return self:toString(2, len)
 end
 
+--[=[
+@method toOct
+@param? length number
+@returns string
+@description TODO
+]=]
 function Bitfield:toOct(len)
 	return self:toString(8, len)
 end
 
+--[=[
+@method toDec
+@param? length number
+@returns string
+@description TODO
+]=]
 function Bitfield:toDec(len)
 	return self:toString(10, len)
 end
 
+--[=[
+@method toHex
+@param? length number
+@returns string
+@description TODO
+]=]
 function Bitfield:toHex(len)
 	return self:toString(16, len)
 end
 
+--[=[
+@method enableBit
+@param bit number[1,64]
+@returns nil
+@description TODO
+]=]
 function Bitfield:enableBit(n) -- 1-indexed
 	n = checkBit(n)
 	return self:enableValue(lshift(1ULL, n - 1))
 end
 
+--[=[
+@method disableBit
+@param bit number[1,64]
+@returns nil
+@description TODO
+]=]
 function Bitfield:disableBit(n) -- 1-indexed
 	n = checkBit(n)
 	return self:disableValue(lshift(1ULL, n - 1))
 end
 
+--[=[
+@method toggleBit
+@param bit number[1,64]
+@returns nil
+@description TODO
+]=]
 function Bitfield:toggleBit(n) -- 1-indexed
 	n = checkBit(n)
 	return self:toggleValue(lshift(1ULL, n - 1))
 end
 
+--[=[
+@method hasBit
+@param bit number[1,64]
+@returns boolean
+@description TODO
+]=]
 function Bitfield:hasBit(n) -- 1-indexed
 	n = checkBit(n)
 	return self:hasValue(lshift(1ULL, n - 1))
 end
 
+--[=[
+@method enableValue
+@param value string,number,uint64
+@param? base number 10
+@returns nil
+@description TODO
+]=]
 function Bitfield:enableValue(v, base)
 	v = checkValue(v, base)
 	self._value = bor(self._value, v)
 end
 
+--[=[
+@method disableValue
+@param value string,number,uint64
+@param? base number 10
+@returns nil
+@description TODO
+]=]
 function Bitfield:disableValue(v, base)
 	v = checkValue(v, base)
 	self._value = band(self._value, bnot(v))
 end
 
+--[=[
+@method toggleValue
+@param value string,number,uint64
+@param? base number 10
+@returns nil
+@description TODO
+]=]
 function Bitfield:toggleValue(v, base)
 	v = checkValue(v, base)
 	self._value = bxor(self._value, v)
 end
 
+--[=[
+@method hasValue
+@param value string,number,uint64
+@param? base number 10
+@returns boolean
+@description TODO
+]=]
 function Bitfield:hasValue(v, base)
 	v = checkValue(v, base)
 	return band(self._value, v) == v
 end
 
+--[=[
+@method union
+@param other Bitfield
+@returns Bitfield
+@description TODO
+]=]
 function Bitfield:union(other) -- bits in either A or B
 	return Bitfield(bor(checkBitfield(self), checkBitfield(other)))
 end
 
+--[=[
+@method complement
+@param other Bitfield
+@returns Bitfield
+@description TODO
+]=]
 function Bitfield:complement(other) -- bits in A but not in B
 	return Bitfield(band(checkBitfield(self), bnot(checkBitfield(other))))
 end
 
+--[=[
+@method difference
+@param other Bitfield
+@returns Bitfield
+@description TODO
+]=]
 function Bitfield:difference(other) -- bits in A or B but not in both
 	return Bitfield(bxor(checkBitfield(self), checkBitfield(other)))
 end
 
+--[=[
+@method intersection
+@param other Bitfield
+@returns Bitfield
+@description TODO
+]=]
 function Bitfield:intersection(other) -- bits in both A and B
 	return Bitfield(band(checkBitfield(self), checkBitfield(other)))
 end
 
 ----
 
+--[=[
+@property value
+@type uint64
+@description TODO
+]=]
 function get:value()
 	return self._value
 end

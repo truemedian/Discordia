@@ -1,3 +1,9 @@
+--[=[
+@class Date
+@tag utility
+@description TODO
+]=]
+
 local uv = require('uv')
 local class = require('../class')
 local enums = require('../enums')
@@ -86,6 +92,12 @@ local function checkDate(obj)
 	return error('cannot perform operation', 2)
 end
 
+--[=[
+@constructor __init
+@param? seconds number
+@param? microseconds number
+@description TODO
+]=]
 function Date:__init(s, us)
 	if s or us then
 		s = s and checkInteger(s, 10, 0) or 0
@@ -157,6 +169,12 @@ local function parseString(patterns, tbl, str)
 	return tbl
 end
 
+--[=[
+@static fromISO
+@param str string
+@returns Date
+@description TODO
+]=]
 function Date.fromISO(str)
 
 	str = checkType('string', str)
@@ -189,30 +207,71 @@ function Date.fromISO(str)
 
 end
 
+--[=[
+@static fromSnowflake
+@param id string[Snowflake],uint64
+@returns Date
+@description TODO
+]=]
 function Date.fromSnowflake(id)
 	return Date.fromMilliseconds(floor(checkSnowflake(id) / 2^22) + DISCORD_EPOCH)
 end
 
+--[=[
+@static fromTable
+@param tbl table
+@returns Date
+@description TODO
+]=]
 function Date.fromTable(tbl)
 	return Date(toTime(checkType('table', tbl)))
 end
 
+--[=[
+@static fromTableUTC
+@param tbl table
+@returns Date
+@description TODO
+]=]
 function Date.fromTableUTC(tbl)
 	return Date(toTime(checkType('table', tbl), true))
 end
 
+--[=[
+@static fromSeconds
+@param seconds number
+@returns Date
+@description TODO
+]=]
 function Date.fromSeconds(s)
 	return Date(checkInteger(s, 10, 0))
 end
 
+--[=[
+@static fromMilliseconds
+@param milliseconds number
+@returns Date
+@description TODO
+]=]
 function Date.fromMilliseconds(ms)
 	return Date(0, checkInteger(ms, 10, 0) * US_PER_MS)
 end
 
+--[=[
+@static fromMicroseconds
+@param microseconds number
+@returns Date
+@description TODO
+]=]
 function Date.fromMicroseconds(us)
 	return Date(0, checkInteger(us, 10, 0))
 end
 
+--[=[
+@method toISO
+@returns string
+@description TODO
+]=]
 function Date:toISO()
 	local s, us = self:toParts()
 	if us > 0 then
@@ -222,10 +281,20 @@ function Date:toISO()
 	end
 end
 
+--[=[
+@method toSnowflake
+@returns string[Snowflake]
+@description TODO
+]=]
 function Date:toSnowflake()
 	return format('%i', (self:toMilliseconds() - DISCORD_EPOCH) * 2^22)
 end
 
+--[=[
+@method toTable
+@returns table[string,number]
+@description TODO
+]=]
 function Date:toTable()
 	local sec, usec = self:toParts()
 	local tbl = toDate('*t', sec)
@@ -233,6 +302,11 @@ function Date:toTable()
 	return tbl
 end
 
+--[=[
+@method toTableUTC
+@returns table[string,number]
+@description TODO
+]=]
 function Date:toTableUTC()
 	local sec, usec = self:toParts()
 	local tbl = toDate('!*t', sec)
@@ -240,26 +314,59 @@ function Date:toTableUTC()
 	return tbl
 end
 
+--[=[
+@method toString
+@param format string
+@returns string
+@description TODO
+]=]
 function Date:toString(fmt)
 	return toDate(fmt, self:toSeconds())
 end
 
+--[=[
+@method toSeconds
+@returns number
+@description TODO
+]=]
 function Date:toSeconds()
 	return self._s + self._us / US_PER_S
 end
 
+--[=[
+@method toMilliseconds
+@returns number
+@description TODO
+]=]
 function Date:toMilliseconds()
 	return self._s * MS_PER_S + self._us / US_PER_MS
 end
 
+--[=[
+@method toMicroseconds
+@returns number
+@description TODO
+]=]
 function Date:toMicroseconds()
 	return self._s * US_PER_S + self._us
 end
 
+--[=[
+@method toParts
+@returns number
+@returns number
+@description TODO
+]=]
 function Date:toParts()
 	return normalize(self._s, self._us, US_PER_S)
 end
 
+--[=[
+@method toMention
+@param? style Enumerations#dateTimeStyle
+@returns string
+@description TODO
+]=]
 function Date:toMention(style)
 	local t = floor(self:toSeconds())
 	if style then

@@ -1,3 +1,9 @@
+--[=[
+@class Logger
+@tag utility
+@description TODO
+]=]
+
 local fs = require('fs')
 local pp = require('pretty-print')
 local class = require('../class')
@@ -35,6 +41,14 @@ end
 
 local Logger = class('Logger')
 
+--[=[
+@constructor __init
+@param level Enumerations#logLevel
+@param? dateFormat string
+@param? filePath string
+@param? useColors boolean
+@description TODO
+]=]
 function Logger:__init(level, dateFormat, filePath, useColors)
 	self._level = checkEnum(enums.logLevel, level)
 	self._dateFormat = dateFormat and checkType('string', dateFormat)
@@ -43,14 +57,32 @@ function Logger:__init(level, dateFormat, filePath, useColors)
 	self._line = {nil, ' | ', nil, ' | ', nil, '\n'}
 end
 
+--[=[
+@method setLevel
+@param level Enumerations#logLevel
+@return nil
+@description TODO
+]=]
 function Logger:setLevel(level)
 	self._level = checkEnum(enums.logLevel, level)
 end
 
+--[=[
+@method setDateTime
+@param dateFormat string
+@return nil
+@description TODO
+]=]
 function Logger:setDateTime(dateFormat)
 	self._dateFormat = dateFormat and checkType('string', dateFormat) or nil
 end
 
+--[=[
+@method setFile
+@param path string
+@return nil
+@description TODO
+]=]
 function Logger:setFile(path)
 	if self._file then
 		closeSync(self._file)
@@ -60,14 +92,32 @@ function Logger:setFile(path)
 	end
 end
 
+--[=[
+@method enableColors
+@return nil
+@description TODO
+]=]
 function Logger:enableColors()
 	self._useColors = true
 end
 
+--[=[
+@method disableColors
+@return nil
+@description TODO
+]=]
 function Logger:disableColors()
 	self._useColors = false
 end
 
+--[=[
+@method log
+@param level Enumerations#logLevel
+@param msg string
+@param ... any
+@return string
+@description TODO
+]=]
 function Logger:log(level, msg, ...)
 
 	level = checkEnum(enums.logLevel, level)

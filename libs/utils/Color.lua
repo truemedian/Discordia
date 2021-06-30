@@ -1,3 +1,9 @@
+--[=[
+@class Color
+@tag utility
+@description TODO
+]=]
+
 local class = require('../class')
 local typing = require('../typing')
 
@@ -82,22 +88,57 @@ local function checkColor(obj)
 	return error('cannot perform operation', 2)
 end
 
+-- 16777215 is 0xFFFFFF
+--[=[
+@constructor __init
+@param? value number[0,16777215] 0
+@param? base number[2,36] 10
+@description TODO
+]=]
 function Color:__init(n, base)
 	self._n = n and checkValue(n, base) or 0
 end
 
+--[=[
+@static fromDec
+@param? value number[0,16777215] 0
+@returns Color
+@description TODO
+]=]
 function Color.fromDec(dec)
 	return Color(dec, 10)
 end
 
+--[=[
+@static fromHex
+@param? value number[0,16777215] 0
+@returns Color
+@description TODO
+]=]
 function Color.fromHex(hex)
 	return Color(hex, 16)
 end
 
+--[=[
+@static fromRGB
+@param red number[0,255]
+@param green number[0,255]
+@param blue number[0,255]
+@returns Color
+@description TODO
+]=]
 function Color.fromRGB(r, g, b)
 	return Color(bor(checkByte(r, 16), checkByte(g, 8), checkByte(b, 0)))
 end
 
+--[=[
+@static fromHSV
+@param hue number[0,360]
+@param saturation number[0,1]
+@param value number[0,1]
+@returns Color
+@description TODO
+]=]
 function Color.fromHSV(h, s, v)
 	h = checkAngle(h)
 	s = checkFloat(s)
@@ -108,6 +149,14 @@ function Color.fromHSV(h, s, v)
 	return Color.fromRGB(r, g, b)
 end
 
+--[=[
+@static fromHSL
+@param hue number[0,360]
+@param saturation number[0,1]
+@param light number[0,1]
+@returns Color
+@description TODO
+]=]
 function Color.fromHSL(h, s, l)
 	h = checkAngle(h)
 	s = checkFloat(s)
@@ -175,6 +224,13 @@ function Color:__div(other)
 	end
 end
 
+--[=[
+@method lerp
+@param other Color
+@param delta number[0,1]
+@returns Color
+@description TODO
+]=]
 function Color:lerp(other, t)
 	t = checkFloat(t)
 	local r1, g1, b1 = checkColor(self)
@@ -182,28 +238,64 @@ function Color:lerp(other, t)
 	return Color.fromRGB(lerp(r1, r2, t), lerp(g1, g2, t), lerp(b1, b2, t))
 end
 
+--[=[
+@method toString
+@returns string
+@description TODO
+]=]
 function Color:toString()
 	return format('#%s (%i, %i, %i)', self:toHex(), self:toRGB())
 end
 
+--[=[
+@method toDec
+@returns number
+@description TODO
+]=]
 function Color:toDec()
 	return self._n
 end
 
+--[=[
+@method toHex
+@returns string
+@description TODO
+]=]
 function Color:toHex()
 	return format('%06X', self._n)
 end
 
+--[=[
+@method toRGB
+@returns number
+@returns number
+@returns number
+@description TODO
+]=]
 function Color:toRGB()
 	return self.r, self.g, self.b
 end
 
+--[=[
+@method toHSV
+@returns number
+@returns number
+@returns number
+@description TODO
+]=]
 function Color:toHSV()
 	local h, c, v = toHue(self:toRGB())
 	local s = v == 0 and 0 or c / v
 	return h, s, v
 end
 
+--[=[
+@method toHSL
+@returns number
+@returns number
+@returns number
+@description TODO
+]=]
 function Color:toHSL()
 	local h, c, v = toHue(self:toRGB())
 	local l = v - c * 0.5
@@ -211,18 +303,38 @@ function Color:toHSL()
 	return h, s, l
 end
 
+--[=[
+@method copy
+@returns Color
+@description TODO
+]=]
 function Color:copy()
 	return Color(self._n)
 end
 
+--[=[
+@property r
+@type number
+@description TODO
+]=]
 function get:r()
 	return getByte(self._n, 16)
 end
 
+--[=[
+@property g
+@type number
+@description TODO
+]=]
 function get:g()
 	return getByte(self._n, 8)
 end
 
+--[=[
+@property b
+@type number
+@description TODO
+]=]
 function get:b()
 	return getByte(self._n, 0)
 end

@@ -1,3 +1,9 @@
+--[=[
+@class Iterable
+@tag utility
+@description TODO
+]=]
+
 local class = require('../class')
 local typing = require('typing')
 
@@ -6,6 +12,13 @@ local checkType, checkCallable = typing.checkType, typing.checkCallable
 
 local Iterable = class('Iterable')
 
+--[=[
+@constructor __init
+@param array table
+@param? key string,number
+@param? sorter function
+@description TODO
+]=]
 function Iterable:__init(arr, key, sorter)
 	self._arr = arr and checkType('table', arr) or {}
 	self._key = key and checkType('string', key) or nil
@@ -50,6 +63,12 @@ function Iterable:__ipairs()
 	end
 end
 
+--[=[
+@method get
+@param key string,number
+@retruns any
+@description TODO
+]=]
 function Iterable:get(k)
 	local t = type(k)
 	if t == 'string' then
@@ -68,11 +87,22 @@ function Iterable:get(k)
 	end
 end
 
+--[=[
+@method sort
+@param sorter function
+@returns nil
+@description TODO
+]=]
 function Iterable:sort(sorter)
 	self._sorter = checkCallable(sorter)
 	sort(self._arr, sorter)
 end
 
+--[=[
+@method iter
+@returns function[iter]
+@description TODO
+]=]
 function Iterable:iter()
 	local i = 0
 	local arr = self._arr
@@ -82,6 +112,12 @@ function Iterable:iter()
 	end
 end
 
+--[=[
+@method filter
+@param fn function
+@returns Iterable
+@description TODO
+]=]
 function Iterable:filter(fn)
 	checkCallable(fn)
 	local new = {}
@@ -93,6 +129,12 @@ function Iterable:filter(fn)
 	return Iterable(new, self._key, self._sorter)
 end
 
+--[=[
+@method count
+@param fn function
+@returns number
+@description TODO
+]=]
 function Iterable:count(fn)
 	checkCallable(fn)
 	local n = 0
@@ -104,6 +146,12 @@ function Iterable:count(fn)
 	return n
 end
 
+--[=[
+@method find
+@param fn function
+@returns any
+@description TODO
+]=]
 function Iterable:find(fn)
 	checkCallable(fn)
 	for _, v in ipairs(self._arr) do
@@ -113,6 +161,12 @@ function Iterable:find(fn)
 	end
 end
 
+--[=[
+@method forEach
+@param fn function
+@returns nil
+@description TODO
+]=]
 function Iterable:forEach(fn)
 	checkCallable(fn)
 	for _, v in ipairs(self._arr) do
@@ -120,6 +174,11 @@ function Iterable:forEach(fn)
 	end
 end
 
+--[=[
+@method toArray
+@returns table
+@description TODO
+]=]
 function Iterable:toArray()
 	local ret = {}
 	for _, v in ipairs(self._arr) do
@@ -128,6 +187,11 @@ function Iterable:toArray()
 	return ret
 end
 
+--[=[
+@method toTable
+@returns table
+@description TODO
+]=]
 function Iterable:toTable()
 	if self._key then
 		local ret = {}
@@ -140,10 +204,20 @@ function Iterable:toTable()
 	end
 end
 
+--[=[
+@method random
+@returns any
+@description TODO
+]=]
 function Iterable:random()
 	return self._arr[math.random(#self._arr)]
 end
 
+--[=[
+@method copy
+@returns Iterable
+@description TODO
+]=]
 function Iterable:copy()
 	local new = {}
 	for _, v in ipairs(self._arr) do
@@ -152,6 +226,12 @@ function Iterable:copy()
 	return Iterable(new, self._key, self._sorter)
 end
 
+--[=[
+@method select
+@param ... any
+@returns table[table[any]]
+@description TODO
+]=]
 function Iterable:select(...)
 	local rows = {}
 	local keys, n = {...}, select('#', ...)
